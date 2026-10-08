@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Snake Water Gun</title>
+
+
+    <!-- CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <main class="game">
+
+
+        <!-- GAME LABEL -->
+
+        <div class="badge">
+            PYTHON WEB GAME
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            Snake <span>Water</span> Gun
+        </h1>
+
+
+        <p class="subtitle">
+            First to 3 points wins the match
+        </p>
+
+        {% if not you and not computer %}
+
+<section class="welcome-rules">
+
+    <h2>👋 Welcome to Snake Water Gun!</h2>
+
+    <p>How to play:</p>
+
+    <div class="rules">
+        <div>🐍 Snake → beats 💧 Water </div>
+        <div>💧 Water → beats 🔫 Gun </div>
+        <div>🔫 Gun → beats 🐍 Snake </div>
+    </div>
+
+    <p class="first-to">
+        🏆 First to 3 points wins!
+    </p>
+
+</section>
+
+{% endif %}
+
+
+
+        <!-- SCOREBOARD -->
+
+        <section class="scoreboard">
+
+
+            <div class="score-box">
+
+                <span>
+                    You
+                </span>
+
+                <strong>
+                    {{ user_score }}
+                </strong>
+
+            </div>
+
+
+            <div class="vs">
+                VS
+            </div>
+
+
+            <div class="score-box">
+
+                <span>
+                    Computer
+                </span>
+
+                <strong>
+                    {{ comp_score }}
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- RESULT -->
+
+        <section class="result {{ result_type }}">
+
+
+            <p class="result-title">
+
+                {{ message }}
+
+            </p>
+
+
+            {% if you or computer %}
+
+
+            <p class="choices">
+
+
+                <span>
+
+                    You:
+                    <b>
+                        {{ you }}
+                    </b>
+
+                </span>
+
+
+                <span>
+
+                    Computer:
+                    <b>
+                        {{ computer }}
+                    </b>
+
+                </span>
+
+
+            </p>
+
+
+            {% else %}
+
+
+            <p class="choices">
+
+                Make your move below
+
+            </p>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- CHOOSE MOVE -->
+
+        <h2>
+            Choose your move
+        </h2>
+
+
+
+        <form method="POST"
+              class="choices-grid">
+
+
+            <!-- SNAKE -->
+
+            <button
+                class="move snake"
+                name="choice"
+                value="s"
+                type="submit"
+                {% if game_over %}disabled{% endif %}>
+
+                <span class="emoji">
+                    🐍
+                </span>
+
+                <span>
+                    Snake
+                </span>
+
+            </button>
+
+
+
+            <!-- WATER -->
+
+            <button
+                class="move water"
+                name="choice"
+                value="w"
+                type="submit"
+                {% if game_over %}disabled{% endif %}>
+
+                <span class="emoji">
+                    💧
+                </span>
+
+                <span>
+                    Water
+                </span>
+
+            </button>
+
+
+
+            <!-- GUN -->
+
+            <button
+                class="move gun"
+                name="choice"
+                value="g"
+                type="submit"
+                {% if game_over %}disabled{% endif %}>
+
+                <span class="emoji">
+                    🔫
+                </span>
+
+                <span>
+                    Gun
+                </span>
+
+            </button>
+
+
+        </form>
+
+
+
+        <!-- MANUAL RESTART -->
+
+        <form method="POST">
+
+
+            <button
+                class="restart"
+                name="choice"
+                value="reset"
+                type="submit">
+
+                ↻ Restart Match
+
+            </button>
+
+
+        </form>
+
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            Built with Python + Flask
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- AUTOMATIC RESET -->
+
+    {% if game_over %}
+
+    <script>
+
+        setTimeout(function () {
+
+            fetch("/auto-reset", {
+                method: "POST"
+            })
+            .then(function () {
+
+                window.location.href = "/";
+
+            });
+
+        }, 2500);
+
+    </script>
+
+    {% endif %}
+
+
+</body>
+
+</html>
